@@ -14,6 +14,7 @@ class ContactTable extends Component{
         // This binding is necessary to make `this` work in the callback
         this.updateContact = this.updateContact.bind(this);
         this.deleteContacts = this.deleteContacts.bind(this);
+        this.removeUpdateContactForm = this.removeUpdateContactForm.bind(this);
 
         this.state = {
             data: [],
@@ -41,11 +42,16 @@ class ContactTable extends Component{
     updateContact = (contact) => (event) => {
         this.setState({
             data: this.state.data,
-            editUser: !this.state.editUser,
+            editUser: true,
             cachedUser: contact
         });
     }
     
+    removeUpdateContactForm = (event) =>{
+        this.setState({
+            editUser: false,
+        }); 
+    }
 
     updateContacts = (contact) =>{
         let tmpData = this.state.data;
@@ -115,7 +121,8 @@ class ContactTable extends Component{
             editPage =  <UpdateContact 
                             contactData={this.state.cachedUser}
                             updateContacts={this.updateContacts}
-                             />   
+                            removeComponent={this.removeUpdateContactForm}
+                        />   
         } else{
             editPage = <br/>
         }
@@ -143,22 +150,16 @@ class ContactTable extends Component{
                 <br/>
                 <Map className="mapObj"
                     style="mapbox://styles/mapbox/streets-v9"
+                    center={[-74.1759786, 41.0981516]}
                     containerStyle={{
                         height: "50vh",
-                        width: "50vw",
+                        width: "100vw",
                     }}>
                     <Layer
                         type="symbol"
-                        id="marker"
-                        layout={{ "icon-image": "marker-15" }}>
-                        <Feature coordinates={[-0.481747846041145, 51.3233379650232]}/>
+                        layout={{ "icon-image": "harbor-15" }}>
+                        <Feature coordinates={[-74.1759786, 41.0981516]}/>
                     </Layer>
-                    <Marker
-                        coordinates={[-0.481747846041145, 51.323337965023]}
-                        anchor="bottom">
-                        <h1> test </h1>
-                    </Marker>
-
                 </Map>
 
                 {editPage}

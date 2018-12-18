@@ -5,7 +5,12 @@ class UpdateContact extends Component{
 
     constructor(props){
         super(props);
-        this.state = props.contactData;
+        this.state = {
+            contact: props.contactData,
+            hasSubmitted: false
+        }
+
+        console.log(this.state.contact);
     }
 
     componentDidMount(props){
@@ -18,20 +23,29 @@ class UpdateContact extends Component{
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ post: this.state }),
+          body: JSON.stringify({ post: this.state.contact }),
         });
+
         const body = await response.json();
         // log data to client console for debug purposes.
         this.setState(body);
-        this.props.updateContacts(this.state);
-      };
+        this.props.updateContacts(this.state.contact);
+        this.setState({hasSubmitted: true});
+    }
     
 
     render(){
+        let status;
+        if(!this.state.hasSubmitted){
+            status = <strong> Update contact information </strong>
+        }else{
+            status = <strong> Contact information updated </strong>
+        }
+
         return(
             <div className="Update">
                 <p>
-                    <strong>Enter Contact Information:</strong>
+                    {status}
                 </p> 
                 <form onSubmit={this.handleSubmit}> 
                     <p>
@@ -39,9 +53,13 @@ class UpdateContact extends Component{
                     </p>           
                     <input
                         type="text"
-                        placeholder={this.state.firstName}
-                        value={this.state.firstName}
-                        onChange={e => this.setState({firstName: e.target.value})}
+                        value={this.state.contact.firstName}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.firstName = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                                }
                     />
                     <br/>
                     <p>
@@ -49,8 +67,13 @@ class UpdateContact extends Component{
                     </p> 
                     <input
                         type="text"
-                        value={this.state.lastName}
-                        onChange={e => this.setState({lastName: e.target.value})}
+                        value={this.state.contact.lastName}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.lastName = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                        }
                     />
                     <br/>
                     <p>
@@ -58,8 +81,13 @@ class UpdateContact extends Component{
                     </p> 
                     <input
                         type="text"
-                        value={this.state.street}
-                        onChange={e => this.setState({street: e.target.value})}
+                        value={this.state.contact.street}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.street = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                        }
                     />
                     <br/>
                     <p>
@@ -67,8 +95,13 @@ class UpdateContact extends Component{
                     </p> 
                     <input
                         type="text"
-                        value={this.state.state}
-                        onChange={e => this.setState({state: e.target.value})}
+                        value={this.state.contact.state}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.state = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                        }
                     />
                     <br/>
                     <p>
@@ -76,11 +109,19 @@ class UpdateContact extends Component{
                     </p> 
                     <input
                         type="text"
-                        value={this.state.zip}
-                        onChange={e => this.setState({zip: e.target.value})}
+                        value={this.state.contact.zip}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.zip = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                        }
                     />
                     <br/>
                     <button type="submit">Submit</button>
+                    <br/>
+                    <br/>
+                    <button onClick={this.props.removeComponent}> done </button>
             </form>
           </div>
         );
