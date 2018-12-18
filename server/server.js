@@ -1,39 +1,29 @@
 const express = require('express');
+const NodeGeocoder = require('node-geocoder');
 const bodyParser = require('body-parser');
-const mongo = require("mongoose");
+const mongo = require('./mongo.js');
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongo.connect("mongodb://localhost/db") // dabase being used called db
-const db = mongo.connection;
+const options = {
+  provider: 'mapquest',
+  apiKey: 'b24rIbWnkcAzimjXKGtsYBEy2b0c1z6y',
+  httpAdapter: 'https'
+}
 
-db.on('error', console.error.bind(console, "Connection error!"));
+const geocoder = NodeGeocoder(options);
 
-db.once('open', function() {
-  const date = new Date();
-  console.log("Database connect at: ", date.getHours(), ":", date.getMinutes());
-});
-
-var contactSchema = new mongo.Schema({
-  firstName: String,
-  lastName: String,
-  street: String,
-  state: String,
-  zip: String,
-  coords: Array
-});
-
-let contactModel = mongo.model('contactModel', contactSchema);
+mongo.initDatabase();
 
 app.get('/api/get/contacts', async (req, res) => {
 
-  const data = await contactModel.find((err, arr) =>{
-      if(err)
-        return console.error(err);
-  });
+  const data = await mongo.queryContacts();
+
+  console.log(data);
 
   res.send(
     {contacts: data}
@@ -43,46 +33,62 @@ app.get('/api/get/contacts', async (req, res) => {
 
 
 app.post('/api/addUser', async (req, res) => {
-  let newContact = new contactModel(req.body.post);
-  
-  const update = await newContact.save((err, newContact) =>{
-      if(err) return console.error(err);
+  let status = "";
+  const newContact = req.body.post;
 
-      console.log("data saved", req.body.post);
-  }); 
+  const address = newContact.street + ' ' + newContact.state + ' ' + newContact.zip; 
+
+  const coordinates = await geocoder.geocode(address)
+  .then(function(res) {
+    console.log(res);
+    newContact.coords.push(res[0].longitude);
+    newContact.coords.push(res[0].latitude);
+    console.log(newContact)
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+
+  try{
+    const saveData = await mongo.saveContact(newContact);
+    status = saveData;
+  }catch(err){
+    status = "Error while saving."
+    console.error(err);
+  }
 
   res.send(
-    { contacts: "data saved"}
+    { contacts: status}
   );
 });
 
 
 app.put('/api/updateUser', async (req, res) => {
-    console.log(req.body.post._id);
-    const document = req.body.post;
-    let update = await contactModel.findOneAndUpdate({_id: document._id}, 
-                                                      document, 
-                                                      {upsert: true}, 
-                                                      (err, doc) =>{
-      if(err) return console.error(err);
+    let status = null;
+    try{
+      const contact = req.body.post;
+      const updateData = mongo.updateContact(contact);
+      status = updateData;
+    }catch(err){
+      status = err;
+    }
 
-      console.log("contact updated");
-    });
-
-
-    res.send({data: update});
+    res.send({data: status});
 });
 
 
 app.delete('/api/deleteUser', async (req, res) => {
-  const document = req.body.post;
+  const contact = req.body.post;
+  let response = null;
+  try{
+    const deletdContact = await mongo.deleteContact(contact);
+    response = deletdContact;
+  } catch(err){
+    console.error(err);
+    response = err;
+  }
 
-    let deleteReq = await contactModel.findOneAndDelete({_id: document._id},
-                                                        (err,doc) =>{
-                    if(err) return console.error(err);
-                    console.log("contact deleted.", doc);
-    });
-
+  res.send({data: response});
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

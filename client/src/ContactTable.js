@@ -112,6 +112,23 @@ class ContactTable extends Component{
         }
         return table
     }
+
+    createMarkerLayer = () => {
+        let layers = [];
+
+        for(let i = 0; i < this.state.data.length; i++){
+                layers.push(                    
+                    <Layer
+                        type="symbol"
+                        layout={{ "icon-image": "harbor-15" }}>
+                        <Feature coordinates={this.state.data[i].coords}/>
+                    </Layer>
+                );
+        }
+        
+        console.log(layers);
+        return layers;
+    }
     
     render() {
         const editUser = this.state.editUser;
@@ -160,6 +177,7 @@ class ContactTable extends Component{
                         layout={{ "icon-image": "harbor-15" }}>
                         <Feature coordinates={[-74.1759786, 41.0981516]}/>
                     </Layer>
+                    {this.createMarkerLayer()}
                 </Map>
 
                 {editPage}
