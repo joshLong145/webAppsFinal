@@ -10,6 +10,9 @@ class createUser extends Component{
       street: "",
       state: "",
       zip: "",
+      phone: "",
+      email: "",
+      prefix: "",
       coords: []  
     }
 
@@ -83,6 +86,33 @@ class createUser extends Component{
                         type="text"
                         value={this.state.post}
                         onChange={e => this.state.zip = e.target.value}
+                    />
+                    <br/>
+                    <p>
+                        <strong> Phone number </strong>
+                    </p> 
+                    <input
+                        type="text"
+                        value={this.state.post}
+                        onChange={e => this.state.phone = e.target.value}
+                    />
+                    <br/>
+                    <p>
+                        <strong> Email </strong>
+                    </p> 
+                    <input
+                        type="text"
+                        value={this.state.post}
+                        onChange={e => this.state.email = e.target.value}
+                    />
+                    <br/>
+                    <p>
+                        <strong> Prefix </strong>
+                    </p> 
+                    <input
+                        type="text"
+                        value={this.state.post}
+                        onChange={e => this.state.prefix = e.target.value}
                     />
                     <br/>
                     <button type="submit">Submit</button>

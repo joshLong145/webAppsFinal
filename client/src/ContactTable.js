@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
 import UpdateContact from './UpdateContact';
+import './App.css'
 
 const Map = ReactMapboxGl({
     accessToken: "pk.eyJ1IjoiamxvbmcyIiwiYSI6ImNqb2RiM3lsdTB1bTYzdm1zZTJ2cXNrcGgifQ.jNhf4j5RCepYVW4MCQUnlg"
@@ -96,6 +97,9 @@ class ContactTable extends Component{
             children.push(<td>{this.state.data[i].street}</td>);
             children.push(<td>{this.state.data[i].state}</td>);
             children.push(<td>{this.state.data[i].zip}</td>);
+            children.push(<td>{this.state.data[i].phone}</td>);
+            children.push(<td>{this.state.data[i].email}</td>);
+            children.push(<td>{this.state.data[i].prefix}</td>);
             children.push(<td> <button 
                                     onClick={this.updateContact(this.state.data[i])}> 
                                     Update info 
@@ -156,6 +160,9 @@ class ContactTable extends Component{
                             <th> Street </th>
                             <th> State </th>
                             <th> Zip </th>
+                            <th> phone </th>
+                            <th> email </th>
+                            <th> prefix </th>
                             <th>  </th>
                             <th> </th>
                         </tr>

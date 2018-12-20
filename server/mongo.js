@@ -13,6 +13,9 @@ const contactSchema = new mongo.Schema({
     street: String,
     state: String,
     zip: String,
+    phone: String,
+    email: String,
+    prefix: String,
     coords: [{type: Number}]
 });
 

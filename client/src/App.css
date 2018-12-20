@@ -24,7 +24,11 @@
 }
 
 .contact-table th{
-  padding: 20px;
+  padding: 10px;
+}
+
+td{
+  padding: 10px;
 }
 
 .Update {

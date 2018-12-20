@@ -14,7 +14,6 @@ const options = {
   apiKey: 'b24rIbWnkcAzimjXKGtsYBEy2b0c1z6y',
   httpAdapter: 'https'
 }
-
 const geocoder = NodeGeocoder(options);
 
 mongo.initDatabase();
@@ -89,6 +88,18 @@ app.delete('/api/deleteUser', async (req, res) => {
   }
 
   res.send({data: response});
+});
+
+
+app.post('/api/userLogin', (req, res) =>{
+      const creds = req.body;
+      var login = false;
+
+      if(creds.post.username === "cmps369" && creds.post.password === "finalproject"){
+          login = true;
+      }
+
+      res.send({data: login});
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

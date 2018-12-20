@@ -4,11 +4,13 @@ import './App.css';
 
 import ContactTable from "./ContactTable";
 import createUser from './createUser';
+import Login from './userLogin';
 
 class App extends Component {
   
   state = {
-    post: ""
+    post: "",
+    isLoggedIn: false
   }
 
   // If the app component mounts successfully then we are in buisness. 
@@ -16,30 +18,26 @@ class App extends Component {
 
   }
 
-  handleSubmit = async e => {
-    e.preventDefault();
-    const response = await fetch('/api/world', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ post: this.state.post }),
-    });
-    const body = await response.json();
-    // log data to client console for debug purposes.
-    console.log(this.state.responseToPost)
-    this.setState({ responseToPost: body["contacts"] });
-  };
+  toggleLogIn = () =>{
+    this.setState({isLoggedIn: true});
+  }
 
   render() {
+    let contacts;
+
+    if(this.state.isLoggedIn){
+      contacts = <Route path="/contacts" component={ContactTable}  />;
+    }else{
+      contacts = <Route path="/contacts" component={() => <Login toggle={this.toggleLogIn} />}/>
+    }
     return (
       <div className="App">
         <p> <Link to="/contacts"> <strong> see contacts </strong> </Link> </p>
         <p> <Link to="/mailer"> <strong> create user </strong> </Link> </p>
         <br/>
-        <Route path="/contacts" component={ContactTable} />
+          {contacts}
         <br/>
-        <Route path="/mailer" component={createUser} />
+          <Route path="/mailer" component={createUser} />
       </div>
     );
   }
