@@ -117,6 +117,58 @@ class UpdateContact extends Component{
                                         }   
                         }
                     />
+                     <br/>
+                    <p>
+                        <strong> Phone number </strong>
+                    </p> 
+                    <input
+                        type="text"
+                        value={this.state.contact.phone}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.phone = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                        }
+                    />
+                    <br/>
+                    <p>
+                        <strong> Email </strong>
+                    </p> 
+                    <input
+                        type="text"
+                        value={this.state.contact.email}
+                        onChange={(e) =>{
+                                    let tmpContact = this.state.contact;
+                                    tmpContact.email = e.target.value;  
+                                    this.setState({contact: tmpContact});
+                                }   
+                        }
+                    />
+                    <br/>
+                    <p>
+                        <strong> Prefix </strong>
+                    </p> 
+                    <input
+                        type="text"
+                        value={this.state.contact.prefix}
+                        onChange={(e) =>{
+                                            let tmpContact = this.state.contact;
+                                            tmpContact.prefix = e.target.value;  
+                                            this.setState({contact: tmpContact});
+                                        }   
+                        }
+                    />
+                    <br/>
+                    <p> 
+                        <strong>How May we contact you? </strong>
+
+                    </p>
+                    <input type="checkbox" name="contact" value="phone"/> Phone
+                    <input type="checkbox" name="contact" value="mail"/> Mail
+                    <input type="checkbox" name="contact" value="email"/> Email
+                    <input type="checkbox" name="contact" value="any"/> Any
+                    <br/>
                     <br/>
                     <button type="submit">Submit</button>
                     <br/>

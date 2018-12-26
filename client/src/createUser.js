@@ -13,11 +13,11 @@ class createUser extends Component{
       phone: "",
       email: "",
       prefix: "",
-      coords: []  
+      coords: [],
+      submit: false
     }
 
     componentDidMount(){
-
     }
 
     handleSubmit = async e => {
@@ -30,13 +30,18 @@ class createUser extends Component{
           body: JSON.stringify({ post: this.state }),
         });
         const body = await response.json();
-        // log data to client console for debug purposes.
-        console.log(this.state.responseToPost)
-        this.setState({ responseToPost: body["contacts"] });
+        this.setState({submit: true});
       };
     
 
     render(){
+        let submited;
+        if(!this.state.submit){
+            submited = <br/>;
+        }else{
+            submited = <p> <strong> Data sent to the void </strong> </p>;
+        }
+
         return(
             <div className="App">
                 <p>
@@ -115,8 +120,19 @@ class createUser extends Component{
                         onChange={e => this.state.prefix = e.target.value}
                     />
                     <br/>
+                    <p> 
+                        <strong>How May we contact you? </strong>
+
+                    </p>
+                    <input type="checkbox" name="contact" value="phone"/> Phone
+                    <input type="checkbox" name="contact" value="mail"/> Mail
+                    <input type="checkbox" name="contact" value="email"/> Email
+                    <input type="checkbox" name="contact" value="any"/> Any
+                    <br/>
+                    <br/>
                     <button type="submit">Submit</button>
             </form>
+            {submited}
           </div>
         );
     }

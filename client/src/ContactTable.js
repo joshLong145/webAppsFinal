@@ -20,7 +20,8 @@ class ContactTable extends Component{
         this.state = {
             data: [],
             editUser: false,
-            cachedUser: null
+            cachedUser: null,
+            mapPosition: [-74.1759786, 41.0981516]
         }
       }
 
@@ -85,6 +86,11 @@ class ContactTable extends Component{
         }
     }
 
+    moveMap = (contact) => (event) =>{
+        this.setState({mapPosition: contact.coords});
+        console.log("asdasd");
+    }
+
     createTable = () => {
         let table = [];
     
@@ -94,7 +100,7 @@ class ContactTable extends Component{
             //Inner loop to create children ( will be needed again soon.)
             children.push(<td>{this.state.data[i].firstName}</td>);
             children.push(<td>{this.state.data[i].lastName}</td>);
-            children.push(<td>{this.state.data[i].street}</td>);
+            children.push(<td onClick={this.moveMap(this.state.data[i])}>{this.state.data[i].street}</td>);
             children.push(<td>{this.state.data[i].state}</td>);
             children.push(<td>{this.state.data[i].zip}</td>);
             children.push(<td>{this.state.data[i].phone}</td>);
@@ -124,13 +130,16 @@ class ContactTable extends Component{
                 layers.push(                    
                     <Layer
                         type="symbol"
-                        layout={{ "icon-image": "harbor-15" }}>
+                        layout={{ 
+                                    "icon-image": "harbor-15",
+                                    "icon-size": 2
+                                }
+                    }>
                         <Feature coordinates={this.state.data[i].coords}/>
                     </Layer>
                 );
         }
         
-        console.log(layers);
         return layers;
     }
     
@@ -174,16 +183,11 @@ class ContactTable extends Component{
                 <br/>
                 <Map className="mapObj"
                     style="mapbox://styles/mapbox/streets-v9"
-                    center={[-74.1759786, 41.0981516]}
+                    center={this.state.mapPosition}
                     containerStyle={{
                         height: "50vh",
-                        width: "100vw",
+                        width: "100%",
                     }}>
-                    <Layer
-                        type="symbol"
-                        layout={{ "icon-image": "harbor-15" }}>
-                        <Feature coordinates={[-74.1759786, 41.0981516]}/>
-                    </Layer>
                     {this.createMarkerLayer()}
                 </Map>
 

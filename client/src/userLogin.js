@@ -52,7 +52,7 @@ class userLogin extends Component{
                         <strong> Password </strong>
                     </p> 
                     <input
-                        type="text"
+                        type="password"
                         value={this.state.post}
                         onChange={e => this.state.password = e.target.value}
                     />
